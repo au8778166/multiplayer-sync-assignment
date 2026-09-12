@@ -95,7 +95,31 @@ Implemented in `client/src/interpolation.ts` (`CursorInterpolator`), one instanc
 
 ---
 
+## Known limitations
 
+- No persistence — server restart drops all rooms and presence; clients simply reconnect and re-join as if new.
+- No horizontal scaling — a single Node process holds all room state in memory (see `ARCHITECTURE.md` for a discussion of how this would change).
+- No authentication/access control — any client can join `roomId` `"demo-room"` (or any room ID they construct); this was explicitly out of scope per the assignment FAQ.
+- Only one room is used by the demo UI (`ROOM_ID` is hardcoded in `App.tsx`), though the protocol and server are already multi-room.
+- WebSocket frame parsing supports single, unfragmented text frames plus ping/pong/close control frames — it does not handle fragmented (multi-frame) messages, since browsers don't produce them for JSON-sized payloads in practice.
+- No adaptive/per-client latency-based throttling (fixed 40ms for everyone) and no client-side extrapolation past the latest sample — both are listed as bonus items in the assignment and were left for a follow-up.
 
+## Time spent
 
+~32 hours.
 
+## AI Usage Disclosure
+
+AI tools were used as a development assistant during this project.
+
+AI assistance was primarily used for:
+- Understanding and reviewing the WebSocket protocol and synchronization approach
+- Debugging TypeScript and connection lifecycle issues
+- Reviewing cursor throttling and interpolation logic
+- Reasoning about sequence numbers, stale-message rejection, and reconnection handling
+- Reviewing the implementation against the assignment requirements
+- Improving documentation and explaining technical concepts
+
+The architecture, implementation, integration, and testing were reviewed and validated manually. The application was tested locally using multiple browser tabs to verify real-time cursor synchronization, reactions, presence, joining, disconnection, and reconnection behavior.
+
+AI was used as a supporting tool rather than as a replacement for understanding, testing, or validating the implementation.
